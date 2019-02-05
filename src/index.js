@@ -2,6 +2,8 @@ import React from 'react'
 import addons, { makeDecorator } from '@storybook/addons'
 import fetchMock from 'fetch-mock'
 
+const fetchMockSpy = applyFetchMockSpy(fetchMock)
+
 const mockFetch = makeDecorator({
   name: 'mockFetch',
   parameterName: 'mockFetch',
@@ -11,26 +13,43 @@ const mockFetch = makeDecorator({
     fetchMock.resetHistory()
     fetchMock.reset()
     fetchMock.config = Object.assign(fetchMock.config, options)
-
-    parameters(fetchMock, fetchMockResponseGenerator)
-
+    parameters(fetchMockSpy)
     return storyFn(context)
   },
 })
 
-function fetchMockResponseGenerator(mockResponse) {
-  return (url, options, req) => {
-    logApi(url, req, mockResponse)
-    return mockResponse
+function applyFetchMockSpy(fetchMockApi) {
+  let fetchMockApiSpy = {}
+  for (let m in fetchMockApi) {
+    const prop = fetchMockApi[m]
+    fetchMockApiSpy[m] =
+      typeof prop === 'function' ? applySpy(prop, fetchMockApi) : prop
   }
+
+  return fetchMockApiSpy
 }
 
-function logApi(url, req, resp) {
+function applySpy(fn, context) {
+  function spyWrapper() {
+    var args = Array.prototype.slice.call(arguments)
+    const response = args[1]
+    args[1] = (path, opts) => {
+      logFetch(path, opts, response)
+      return response
+    }
+    return fn.apply(context, args)
+  }
+
+  spyWrapper.prototype = fn.prototype
+
+  return spyWrapper
+}
+
+function logFetch(url, options, response) {
   console.log(`${url}`, {
-    Request: req, 
-    Response: resp
+    Response: response,
+    Options: options,
   })
 }
-
 
 export default mockFetch
