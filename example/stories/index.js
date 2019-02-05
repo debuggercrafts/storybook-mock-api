@@ -9,12 +9,12 @@ const storyOptions = {
       body: [1, 3, 4],
     })
     mockFetch.post('/apples', {
-      status: 204
+      status: 204,
     })
   },
 }
 
-storiesOf('About mocking api calls', module)
+storiesOf('About mocking api calls')
   .addDecorator(
     mockFetch({
       fallbackToNetwork: true,
@@ -27,9 +27,7 @@ storiesOf('About mocking api calls', module)
     () => (
       <Fragment>
         <h2>No fetch calls shall pass!!!</h2>
-        <pre>
-          {`fetch('/apples')`}
-        </pre>
+        <pre>{`fetch('/apples')`}</pre>
         <button
           onClick={() => {
             fetch('/apples')
