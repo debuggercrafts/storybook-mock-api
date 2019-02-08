@@ -3,6 +3,14 @@ import addons, { makeDecorator } from '@storybook/addons'
 import fetchMock from 'fetch-mock'
 
 const fetchMockSpy = applyFetchMockSpy(fetchMock)
+const fetchMockSpyTargetApis = [
+  'mock',
+  'once',
+  'get',
+  'post',
+  'getOnce',
+  'postOnce',
+]
 
 const mockFetch = makeDecorator({
   name: 'mockFetch',
@@ -23,7 +31,9 @@ function applyFetchMockSpy(fetchMockApi) {
   for (let m in fetchMockApi) {
     const prop = fetchMockApi[m]
     fetchMockApiSpy[m] =
-      typeof prop === 'function' ? applySpy(prop, fetchMockApi) : prop
+      fetchMockSpyTargetApis.indexOf(m) >= 0
+        ? applySpy(prop, fetchMockApi)
+        : prop
   }
 
   return fetchMockApiSpy
@@ -31,7 +41,7 @@ function applyFetchMockSpy(fetchMockApi) {
 
 function applySpy(fn, context) {
   function spyWrapper() {
-    var args = Array.prototype.slice.call(arguments)
+    const args = Array.prototype.slice.call(arguments)
     const response = args[1]
     args[1] = (path, opts) => {
       logFetch(path, opts, response)
