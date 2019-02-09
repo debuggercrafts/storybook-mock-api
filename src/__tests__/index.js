@@ -3,6 +3,7 @@ import fetchMock from '../index'
 import mock_fetchMock from '../../__mocks__/fetch-mock'
 
 addons.getChannel = jest.fn().mockImplementation
+global.fetch = jest.fn().mockImplementation(() => Promise.resolve())
 
 describe('Storybook addon fetchMock', () => {
   let setupMocksFn, getStory, context
@@ -37,22 +38,28 @@ describe('Storybook addon fetchMock', () => {
     global.console = {
       log: jest.fn(),
     }
+    global.fetch = jest.fn().mockImplementation(() => Promise.resolve())
     setupMocksFn = jest.fn().mockImplementation(mockFetch => {
-      mockFetch.get(path, expectedResponse)
+      ;['get', 'getOnce', 'post', 'postOnce'].forEach(api => {
+        mockFetch[api](path, expectedResponse)
+      })
     })
     context.parameters.mockFetch = setupMocksFn
     fetchMock(getStory, context)
 
-    // Original `get` method should be called
-    expect(mock_fetchMock.get).toHaveBeenCalledTimes(1)
+    ;['get', 'getOnce', 'post', 'postOnce'].forEach((api) => {
+      global.console.log.mockReset()
+      // Original `get` method should be called
+      expect(mock_fetchMock[api]).toHaveBeenCalledTimes(1)
 
-    // Invoke wrapped `get` call
-    mock_fetchMock.get.mock.calls[0][1](path, options)
+      // Invoke wrapped api call
+      mock_fetchMock[api].mock.calls[0][1](path, options)
 
-    expect(global.console.log).toHaveBeenCalledTimes(1)
-    expect(global.console.log).toHaveBeenCalledWith(path, {
-      Response: expectedResponse,
-      Options: options,
+      expect(global.console.log).toHaveBeenCalledTimes(1)
+      expect(global.console.log).toHaveBeenCalledWith(path, {
+        Response: expectedResponse,
+        Options: options,
+      })
     })
   })
 })

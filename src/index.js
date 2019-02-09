@@ -1,16 +1,13 @@
 import React from 'react'
-import addons, { makeDecorator } from '@storybook/addons'
+import { makeDecorator } from '@storybook/addons'
 import fetchMock from 'fetch-mock'
 
-const fetchMockSpy = applyFetchMockSpy(fetchMock)
-const fetchMockSpyTargetApis = [
-  'mock',
-  'once',
+const fetchMockSpy = applyFetchMockSpy(fetchMock, [
   'get',
-  'post',
   'getOnce',
+  'post',
   'postOnce',
-]
+])
 
 const mockFetch = makeDecorator({
   name: 'mockFetch',
@@ -26,14 +23,12 @@ const mockFetch = makeDecorator({
   },
 })
 
-function applyFetchMockSpy(fetchMockApi) {
+function applyFetchMockSpy(fetchMockApi, apis) {
   let fetchMockApiSpy = {}
   for (let m in fetchMockApi) {
     const prop = fetchMockApi[m]
     fetchMockApiSpy[m] =
-      fetchMockSpyTargetApis.indexOf(m) >= 0
-        ? applySpy(prop, fetchMockApi)
-        : prop
+      apis.indexOf(m) >= 0 ? applySpy(prop, fetchMockApi) : prop
   }
 
   return fetchMockApiSpy
