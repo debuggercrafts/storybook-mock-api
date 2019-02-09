@@ -1,6 +1,7 @@
 # Storybook Mock fetch calls
 
 Mock fetch calls using [mockFetch](http://www.wheresrhys.co.uk/fetch-mock/#api-mockingmock) api.
+[![Build Status](https://travis-ci.com/rihdus/storybook-mock-api.svg?branch=master)](https://travis-ci.com/rihdus/storybook-mock-api)
 
 ## Usage
 
