@@ -1,5 +1,5 @@
 {
-  "name": "addon-mock-api",
+  "name": "@debuggercrafts/addon-mock-api",
   "version": "1.0.0",
   "description": "mocking api calls in storybook",
   "main": "index.js",
@@ -45,5 +45,16 @@
     "@babel/core": "^7.1.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
-  }
+  },
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debuggercrafts/storybook-mock-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/debuggercrafts/storybook-mock-api/issues"
+  },
+  "homepage": "https://github.com/debuggercrafts/storybook-mock-api#readme"
 }
