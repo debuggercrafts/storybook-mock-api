@@ -1,5 +1,5 @@
 {
-  "name": "addon-jsx",
+  "name": "addon-mock-api",
   "version": "1.0.0",
   "description": "mocking api calls in storybook",
   "main": "index.js",
