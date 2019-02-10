@@ -1,5 +1,5 @@
 {
-  "name": "@debuggercrafts/addon-mock-api",
+  "name": "@debuggercrafts/storybook-addon-mock-api",
   "version": "1.0.0",
   "description": "mocking api calls in storybook",
   "main": "index.js",
