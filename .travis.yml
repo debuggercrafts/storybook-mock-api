@@ -5,8 +5,8 @@ jobs:
   include:
     - stage: test
       script: yarn test
-    - # stage name not required, will continue to use `test`
     - stage: deploy
+
 deploy:
   provider: script
   skip_cleanup: true
