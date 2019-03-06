@@ -23,31 +23,33 @@ const mockFetch = makeDecorator({
   },
 })
 
-function applyFetchMockSpy(fetchMockApi, apis) {
+function applyFetchMockSpy(fetchMockApi, apiNames) {
   let fetchMockApiSpy = {}
-  for (let m in fetchMockApi) {
-    const prop = fetchMockApi[m]
-    fetchMockApiSpy[m] =
-      apis.indexOf(m) >= 0 ? applySpy(prop, fetchMockApi) : prop
+  for (let apiName in fetchMockApi) {
+    if (fetchMockApi.hasOwnProperty(apiName)) {
+      const apiFn = fetchMockApi[apiName]
+      fetchMockApiSpy[apiName] =
+        apiNames.indexOf(apiName) >= 0 ? applySpy(apiFn, fetchMockApi) : apiFn
+    }
   }
 
   return fetchMockApiSpy
 }
 
 function applySpy(fn, context) {
-  function spyWrapper() {
+  function fetchSpyWrapper() {
     const args = Array.prototype.slice.call(arguments)
-    const response = args[1]
+    const origResponse = args[1]
     args[1] = (path, opts) => {
-      logFetch(path, opts, response)
-      return response
+      logFetch(path, opts, origResponse)
+      return origResponse
     }
     return fn.apply(context, args)
   }
 
-  spyWrapper.prototype = fn.prototype
+  fetchSpyWrapper.prototype = fn.prototype
 
-  return spyWrapper
+  return fetchSpyWrapper
 }
 
 function logFetch(url, options, response) {
