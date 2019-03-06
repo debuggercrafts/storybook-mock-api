@@ -6,9 +6,9 @@ jobs:
     - stage: test
       script: yarn test
     - stage: deploy
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: yarn release
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: yarn release
 cache: yarn
