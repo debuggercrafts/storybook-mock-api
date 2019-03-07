@@ -7,6 +7,8 @@ jobs:
       script: yarn test
     - stage: deploy
       deploy:
+        on:
+          branch: release
         provider: script
         skip_cleanup: true
         script: yarn release
