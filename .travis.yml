@@ -4,13 +4,11 @@ node_js:
 jobs:
   include:
     - stage: test
-      name: "Test"
-      script: yarn test
-    - stage: release
       name: "Release"
+      script: yarn test
       deploy:
         on:
-          branch: /^(release)\/(.+)$/
+          branch: /^release\/.+$/
         provider: script
         skip_cleanup: true
         script: yarn release
