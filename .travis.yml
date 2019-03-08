@@ -8,7 +8,7 @@ jobs:
       script: yarn test
       deploy:
         on:
-          branch: /^release\/.+$/
+          branch: release
         provider: script
         skip_cleanup: true
         script: yarn release
