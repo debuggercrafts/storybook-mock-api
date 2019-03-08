@@ -3,8 +3,11 @@ node_js:
   - "8.12.0"
 jobs:
   include:
-    - stage: release
+    - stage: test
+      name: "Test"
       script: yarn test
+    - stage: release
+      name: "Release"
       deploy:
         on:
           branch: /^(release)\/(.+)$/
