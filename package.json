@@ -23,7 +23,8 @@
   "keywords": [
     "storybook",
     "fetch",
-    "mock"
+    "mock",
+    "storybook-addon"
   ],
   "author": "rihdus",
   "license": "ISC",
